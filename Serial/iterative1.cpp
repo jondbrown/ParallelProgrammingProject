@@ -55,22 +55,22 @@ bool iterative1::BestTour(int* tour){
 	return newTour<currentTour;
 }
 
-	void iterative1::UpdateBestTour(int* tour){
-		for(int i=0; i<NUM_CITIES; i++){
-			bestTour[i]= tour[i];
-		}
+void iterative1::UpdateBestTour(int* tour){
+	for(int i=0; i<NUM_CITIES; i++){
+		bestTour[i]= tour[i];
 	}
+}
 	
-	bool iterative1::Feasible(int* tour, int city){
-		bool result=true;
-		for(int i=0; i<NUM_CITIES; i++){
-			if(tour[i]==city){
-				result = false;   
-				break;
-			}
+bool iterative1::Feasible(int* tour, int city){
+	bool result=true;
+	for(int i=0; i<NUM_CITIES; i++){
+		if(tour[i]==city){
+			result = false;   
+			break;
 		}
-		return result;
 	}
+	return result;
+}
 
 void iterative1::DepthFirstSearch(int* tour){
 	int city;

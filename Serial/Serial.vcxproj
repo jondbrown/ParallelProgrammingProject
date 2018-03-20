@@ -120,11 +120,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="iterative1.cpp" />
+    <ClCompile Include="iterative2.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="recursive.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iterative1.h" />
+    <ClInclude Include="iterative2.h" />
     <ClInclude Include="recursive.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

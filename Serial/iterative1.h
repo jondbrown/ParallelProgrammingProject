@@ -20,7 +20,7 @@ public:
 	//TOUR FUNCTIONS
 	int CityCount(int* tour);
 	
-	void RemoveLastCity(int *tour);
+	void RemoveLastCity(int* tour);
 	
 	void AddCity(int* tour, int city);
 	
