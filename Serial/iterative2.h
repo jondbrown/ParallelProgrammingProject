@@ -1,6 +1,7 @@
 #pragma once
 #include <stack>
 #include <memory>
+#include <vector>
 
 using namespace std;
 
