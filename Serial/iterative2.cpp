@@ -13,11 +13,9 @@ iterative2::~iterative2()
 }
 
 //Copies the passed tour and pushes it into the stack
-int * iterative2::PushCopy(int * tour)
+void iterative2::PushCopy(int * tour)
 {
-	std::array<int, 4> newTour = tour;
-	theStack.push(newTour);
-	return newTour;
+	
 }
 
 //Checks whether or not the stack is empty

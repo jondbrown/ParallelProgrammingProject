@@ -1,41 +1,35 @@
-#include "Tour.h"
+#include "tour.h"
 
 
 
-Tour::Tour(size_t** adjMat)
+Tour::Tour()
 {
-	adjancencyMatrix = adjMat;
 	cityCount = 0;
-}
-
-//starts a tour at city number 0
-Tour::Tour(int numCities, size_t** adjMat)
-{
-	adjancencyMatrix = adjMat;
-	tourVector.push_back(0);
-	for (int i = 0; i < numCities; i++)
-	{
-		tourVector.push_back(-1);
-	}
-	cityCount = 1;
+	AddCity(0);
+	tourCost = 0;
+	maxNumCities = 1;
+	adjMat = nullptr;
 }
 
 Tour::Tour(int numCities, int startingCity, size_t** adjMat)
 {
-	adjancencyMatrix = adjMat;
 	tourVector.push_back(startingCity);
+	maxNumCities = numCities;
 	for (int i = 0; i < numCities; i++)
 	{
 		tourVector.push_back(-1);
 	}
 	cityCount = 1;
+	this->adjMat = adjMat;
 }
 
 Tour::Tour(const Tour & tourToCopy)
 {
 	tourVector = tourToCopy.GetTourVector();
+	maxNumCities = tourToCopy.GetMaxNumCities();
 	cityCount = tourToCopy.GetCityCount();
-	adjancencyMatrix = tourToCopy.GetAdjMat();
+	tourCost = tourToCopy.GetTourCost();
+	adjMat= tourToCopy.GetAdjMatPtr();
 }
 
 
@@ -46,41 +40,54 @@ Tour::~Tour()
 const vector<size_t>& Tour::GetTourVector() const
 {
 	// TODO: insert return statement here
+	return tourVector;
 }
 
 size_t Tour::GetCityCount() const
 {
-	return size_t();
+	return cityCount;
 }
 
-size_t Tour::GetCityCount() const
+size_t Tour::CalculateTotalTourCost() const
 {
-	return size_t();
+	int result = 0;
+	for (int i = 0; i < maxNumCities - 1; i++)
+	{
+		result += adjMat[tourVector[i]][tourVector[i + 1]];
+	}
+	return result + adjMat[tourVector[maxNumCities - 1]][tourVector[0]];
 }
 
-size_t Tour::GetTotalTourCost() const
+size_t Tour::GetTourCost() const
 {
-	return size_t();
+	return tourCost;
 }
 
-size_t ** Tour::GetAdjMat() const
+size_t Tour::GetMaxNumCities() const
 {
-	return nullptr;
+	return maxNumCities;
+}
+
+size_t ** Tour::GetAdjMatPtr() const
+{
+	return adjMat;
 }
 
 bool Tour::IsComplete() const
 {
-	return false;
+	return maxNumCities == cityCount;
 }
 
 void Tour::AddCity(size_t city)
 {
 	tourVector.insert(tourVector.begin() + cityCount, city);
+	tourCost += adjMat[tourVector[cityCount - 1]][city];
 	cityCount++;
 }
 
-int Tour::RemoveLastCity()
+void Tour::RemoveLastCity()
 {
-	tourVector.insert(tourVector.begin() + cityCount - 1, NO_CITY);
+	tourVector.insert(tourVector.begin() + cityCount - 1, -1);
+	tourCost -= adjMat[tourVector[cityCount - 2]][tourVector[cityCount - 1]];
 	cityCount--;
 }

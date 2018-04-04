@@ -2,44 +2,42 @@
 #define RECURSIVE_H
 
 #include <vector>
+#include "tour.h"
 
 class recursive
 {
 public:
-	#define NUM_CITIES 4
 	#define HOMETOWN 0
 	
 	recursive();
 	~recursive();
 	
 	void PrintBestTour();
-	
-	void PrintAdjMat();
 
 	//Find the current number of cities in the current tour
-	int CityCount(int* tour);
+	int CityCount(Tour tour);
 
 	//overwrites the best tour with the current tour
-	void UpdateBestTour(int* tour);
+	void UpdateBestTour(Tour tour);
 
 	//determines if a city is not included in the current tour
-	bool Feasible(int* tour, int city);
+	bool Feasible(Tour tour, int city);
 
 	//adds city to current tour
-	void AddCity(int* tour, int city);
+	void AddCity(Tour& tour, int city);
 
 	//removes last city in tour
-	void RemoveLastCity(int* tour, int city);
+	void RemoveLastCity(Tour& tour);
 
 	//determines if current tour is better than best tour
-	bool BestTour(int* tour);
+	bool BestTour(Tour tour);
 
 	//main recursive function
-	void DepthFirstSearch(int* tour);
+	void DepthFirstSearch(Tour& tour);
 	
 private:
-	const int adjMat[NUM_CITIES][NUM_CITIES] = {{-1,1,3,8},{4,-1,1,6},{1,18,-1,10},{7,4,12,-1}};
-	int bestTour[NUM_CITIES] = {0, 1, 2, 3};
+	Tour bestTour = Tour();
+	int pathCost = SIZE_MAX;
 };
 
 #endif // RECURSIVE_H
