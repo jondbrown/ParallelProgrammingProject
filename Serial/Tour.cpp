@@ -53,11 +53,6 @@ size_t Tour::GetCityCount() const
 	return size_t();
 }
 
-size_t Tour::GetCityCount() const
-{
-	return size_t();
-}
-
 size_t Tour::GetTotalTourCost() const
 {
 	return size_t();

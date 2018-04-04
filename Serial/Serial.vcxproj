@@ -123,13 +123,11 @@
     <ClCompile Include="iterative2.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="recursive.cpp" />
-    <ClCompile Include="Tour.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iterative1.h" />
     <ClInclude Include="iterative2.h" />
     <ClInclude Include="recursive.h" />
-    <ClInclude Include="Tour.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

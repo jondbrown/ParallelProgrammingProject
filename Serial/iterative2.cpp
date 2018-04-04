@@ -15,7 +15,11 @@ iterative2::~iterative2()
 //Copies the passed tour and pushes it into the stack
 int * iterative2::PushCopy(int * tour)
 {
-	std::array<int, 4> newTour = tour;
+	int* newTour = new int[sizeof(tour)];
+	for (int i = 0; i < sizeof(tour); i++)
+	{
+		newTour[i] = tour[i];
+	}
 	theStack.push(newTour);
 	return newTour;
 }
@@ -61,14 +65,23 @@ int iterative2::CityCount(int * currentTour)
 //Checks if the passed tour is a better tour than the current bestTour
 bool iterative2::BestTour(int * currentTour)
 {
+	//for (int i = 0; i < sizeof(currentTour); i++)
+	//{
+	//	cout << currentTour[i] << endl;
+	//}
+
 	int newTour = 0;
 	//current tour score
 	int cTourScore = 0;
+	//cout << "Got before for loop" << endl;
 	for (int i = 0; i < NUM_CITIES - 1; i++)
 	{
 		newTour += adjMat[currentTour[i]][currentTour[i + 1]];
-		currentTour += adjMat[bestTour[i]][bestTour[i + 1]];
+		//cout << "newTour = " << newTour << endl;
+		cTourScore += adjMat[bestTour[i]][bestTour[i + 1]];
+		//cout << "currentTour = " << currentTour << endl;
 	}
+	//cout << "Got through for loop" << endl;
 	newTour += adjMat[currentTour[NUM_CITIES - 1]][currentTour[HOMETOWN]];
 	cTourScore += adjMat[bestTour[NUM_CITIES - 1]][currentTour[HOMETOWN]];
 	return newTour < cTourScore;
@@ -105,16 +118,17 @@ void iterative2::RemoveLastCity(int * currentTour)
 //Does a breadth first search to find the best tour using a stack of partial tours
 void iterative2::DepthFirstSearch(int * currentTour)
 {
-	cout << "DepthFirstSearchStarting" << endl;
+	//cout << "DepthFirstSearchStarting" << endl;
 	PushCopy(currentTour);
 	while (!Empty())
 	{
 		int* currTour = Pop();
 		if (CityCount(currTour) == NUM_CITIES)
 		{
-			cout << "if" << endl;
+			//cout << "if" << endl;
 			if (BestTour(currTour))
 			{
+				//cout << "if" << endl;
 				UpdateBestTour(currTour);
 			}
 		}
@@ -122,7 +136,7 @@ void iterative2::DepthFirstSearch(int * currentTour)
 		{
 			for (int nbr = NUM_CITIES - 1; nbr >= 1; nbr--)
 			{
-				cout << "Else" << endl;
+				//cout << "Else" << endl;
 				if (Feasible(currTour, nbr))
 				{
 					AddCity(currTour, nbr);
