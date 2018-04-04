@@ -1,6 +1,7 @@
 #pragma once
 #include <stack>
 #include <memory>
+#include <vector>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ public:
 	~iterative2();
 
 	//STACK FUNCTIONS
-	int* PushCopy(int* tour);
+	void PushCopy(int* tour);
 	bool Empty();
 	int* Pop();
 

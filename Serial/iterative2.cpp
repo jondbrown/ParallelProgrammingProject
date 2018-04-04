@@ -13,11 +13,9 @@ iterative2::~iterative2()
 }
 
 //Copies the passed tour and pushes it into the stack
-int * iterative2::PushCopy(int * tour)
+void iterative2::PushCopy(int * tour)
 {
-	int* newTour = tour;
-	theStack.push(newTour);
-	return newTour;
+	
 }
 
 //Checks whether or not the stack is empty
@@ -105,12 +103,14 @@ void iterative2::RemoveLastCity(int * currentTour)
 //Does a breadth first search to find the best tour using a stack of partial tours
 void iterative2::DepthFirstSearch(int * currentTour)
 {
+	cout << "DepthFirstSearchStarting" << endl;
 	PushCopy(currentTour);
 	while (!Empty())
 	{
 		int* currTour = Pop();
 		if (CityCount(currTour) == NUM_CITIES)
 		{
+			cout << "if" << endl;
 			if (BestTour(currTour))
 			{
 				UpdateBestTour(currTour);
@@ -120,6 +120,7 @@ void iterative2::DepthFirstSearch(int * currentTour)
 		{
 			for (int nbr = NUM_CITIES - 1; nbr >= 1; nbr--)
 			{
+				cout << "Else" << endl;
 				if (Feasible(currTour, nbr))
 				{
 					AddCity(currTour, nbr);
@@ -128,9 +129,10 @@ void iterative2::DepthFirstSearch(int * currentTour)
 				}
 			}
 		}
-		//instead of its own method, I just freed the pointer here
-		delete(currTour);
+		delete currTour;
+		currTour = nullptr;
 	}
+	cout << "Done!" << endl;
 }
 
 //prints the bestTour member variable
