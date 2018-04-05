@@ -3,7 +3,7 @@
 using namespace std;
 
 
-recursive::recursive(void){}
+recursive::recursive(void) { bestTourCost = SIZE_MAX; }
 recursive::~recursive(void){}
 
 void recursive::PrintBestTour(){
@@ -13,7 +13,7 @@ void recursive::PrintBestTour(){
 	{
 		cout << tour[i] << " ";
 	}
-	cout << endl << "Total Cost: " << pathCost << endl;
+	cout << endl << "Total Cost: " << bestTourCost << endl;
 }
 
 
@@ -25,7 +25,8 @@ int recursive::CityCount(Tour tour){
 //overwrites the best tour with the current tour
 void recursive::UpdateBestTour(Tour tour){
 	bestTour = tour;
-	pathCost = tour.GetTourCost();
+	bestTourCost = tour.GetTourCost() + tour.GetLastCityCost();
+	cout << "New Best Cost: " << tour.GetLastCityCost() << endl;
 }
 
 //determines if a city is not included in the current tour
@@ -33,9 +34,9 @@ bool recursive::Feasible(Tour tour, int city){
 	bool result = true;
 	size_t** adjMat = tour.GetAdjMatPtr();
 	vector<size_t> tourV = tour.GetTourVector();
-	for (int i = 0; i<tour.GetMaxNumCities(); i++)
+	for (int i = 0; i<tour.GetCityCount(); i++)
 	{
-		if (tourV[i] == city && adjMat[tourV[tour.GetCityCount() - 1]][city])
+		if (tourV[i] == city || adjMat[tourV[tour.GetCityCount() - 1]][city]==0)
 		{
 			result = false;
 			break;
@@ -56,7 +57,7 @@ void recursive::RemoveLastCity(Tour& tour){
 
 //determines if current tour is better than best tour
 bool recursive::BestTour(Tour tour){
-	return tour.GetTourCost() < pathCost;
+	return tour.GetTourCost() + tour.GetLastCityCost() < bestTourCost;
 }
 
 //main recursive function

@@ -37,7 +37,7 @@ public:
 	
 private:
 	Tour bestTour = Tour();
-	int pathCost = SIZE_MAX;
+	size_t bestTourCost;
 };
 
 #endif // RECURSIVE_H

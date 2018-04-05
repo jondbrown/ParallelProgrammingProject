@@ -22,75 +22,61 @@ int iterative1::Pop(){
 }
 //------------------------------------------------------------
 //TOUR FUNCTIONS
-int iterative1::CityCount(int* tour){
-	int count=0;
-	for(int i=0; i<NUM_CITIES; i++){
-		if(tour[i]!=-1){
-			count++;
-		}else{
-			break;
-		}
-	}
-	return count;
+int iterative1::CityCount(Tour tour){
+	return tour.GetCityCount();
 }
 
-void iterative1::RemoveLastCity(int *tour){
-	tour[CityCount(tour)-1]=-1;
+void iterative1::RemoveLastCity(Tour& tour){
+	tour.RemoveLastCity();
 }
 
-void iterative1::AddCity(int* tour, int city){
-	tour[CityCount(tour)] = city;
+void iterative1::AddCity(Tour& tour, int city){
+	tour.AddCity(city);
 }
 
-bool iterative1::BestTour(int* tour){
-	int newTour=0;
-	int currentTour=0;
-	for(int i=0; i<NUM_CITIES-1; i++){
-		newTour += adjMat[tour[i]][tour[i+1]];
-        currentTour += adjMat[bestTour[i]][bestTour[i+1]];
-	}
-	newTour += adjMat[tour[NUM_CITIES-1]][HOMETOWN];
-    currentTour += adjMat[bestTour[NUM_CITIES-1]][HOMETOWN];
-	
-	return newTour<currentTour;
+bool iterative1::BestTour(Tour tour){
+	return tour.GetTourCost()+tour.GetLastCityCost()<bestTourCost;
 }
 
-void iterative1::UpdateBestTour(int* tour){
-	for(int i=0; i<NUM_CITIES; i++){
-		bestTour[i]= tour[i];
-	}
+void iterative1::UpdateBestTour(Tour tour){
+	bestTour = tour;
+	bestTourCost = tour.GetTourCost()+tour.GetLastCityCost();
 }
 	
-bool iterative1::Feasible(int* tour, int city){
-	bool result=true;
-	for(int i=0; i<NUM_CITIES; i++){
-		if(tour[i]==city){
-			result = false;   
+bool iterative1::Feasible(Tour tour, int city){
+	bool result = true;
+	size_t** adjMat = tour.GetAdjMatPtr();
+	vector<size_t> tourV = tour.GetTourVector();
+	for (int i = 0; i<tour.GetCityCount(); i++)
+	{
+		if (tourV[i] == city || adjMat[tourV[tour.GetCityCount() - 1]][city]==0)
+		{
+			result = false;
 			break;
 		}
 	}
 	return result;
 }
 
-void iterative1::DepthFirstSearch(int* tour){
+void iterative1::DepthFirstSearch(Tour& tour){
 	int city;
-	for(city =NUM_CITIES-1; city>=1; city--){
+	for(city = tour.GetMaxNumCities()-1; city>=1; city--){
 		Push(city);
 	}
 	while(!Empty()){
-		city= Pop();
-		if(city==-1){
+		city = Pop();
+		if(city==0){
 			RemoveLastCity(tour);
 		}else{
 			AddCity(tour, city);
-			if(CityCount(tour)==NUM_CITIES){
+			if(tour.IsComplete()){
 				if(BestTour(tour)){
 					UpdateBestTour(tour);
 				}
 				RemoveLastCity(tour);
 			}else{
-				Push(-1);
-				for(int nbr=NUM_CITIES-1; nbr>=1; nbr--){
+				Push(0);
+				for(int nbr=tour.GetMaxNumCities()-1; nbr>=1; nbr--){
 					if(Feasible(tour, nbr)){
 						Push(nbr);
 					}//if Feasible
@@ -103,19 +89,11 @@ void iterative1::DepthFirstSearch(int* tour){
 //------------------------------------------------------------
 //PRINT FUCTIONS
 void iterative1::PrintBestTour(){
-	cout << "Iterative 1 Best Tour: ";
-	for(int i=0; i<NUM_CITIES; i++){
-		cout << bestTour[i] << " ";
+	cout << "Iterative1 Best Tour: ";
+	vector<size_t> tour = bestTour.GetTourVector();
+	for (size_t i = 0; i < bestTour.GetCityCount(); i++)
+	{
+		cout << tour[i] << " ";
 	}
-	cout << endl;
-}
-
-void iterative1::PrintAdjMat(){
-	cout << "Iterative 1 Adjacency Matrix:"<< endl;
-	for(int i=0; i<NUM_CITIES; i++){
-		for(int j=0; j<NUM_CITIES; j++){
-		cout << adjMat[i][j] << " ";
-		}
-		cout << endl;
-	}
+	cout << endl << "Total Cost: " << bestTourCost << endl;
 }

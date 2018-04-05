@@ -21,7 +21,9 @@ public:
 	bool IsComplete() const;	
 	//create City Class Eventually to pass into this method
 	void AddCity(size_t city);
+	int GetLastCityCost();
 	void RemoveLastCity();
+	size_t GetHometown() const;
 private:
 	std::vector<size_t> tourVector;
 	size_t** adjMat;
@@ -29,6 +31,7 @@ private:
 	size_t cityCount;
 	size_t tourCost;
 	size_t maxNumCities;
+	size_t hometown;
 
 
 };

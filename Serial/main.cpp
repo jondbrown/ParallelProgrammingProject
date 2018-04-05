@@ -6,22 +6,33 @@
 
 using namespace std;
 #define NUM_CITIES 4
-size_t** ADJMAT = { 0 };
+size_t** ADJMAT = new size_t*[NUM_CITIES];
 
 int main(){
 	cout << "Initializing Map" << endl;
 	for (int i = 0; i<NUM_CITIES; i++)
 	{
+		ADJMAT[i] = new size_t[NUM_CITIES];
 		for (int j = 0; j<NUM_CITIES; j++)
 		{
 			if (i != j)
 			{
-				ADJMAT[i][j] = rand() % 20;
+				ADJMAT[i][j] = rand() % 20 + 1;
 			}
 			else {
-				ADJMAT[i][j] = -1;
+				ADJMAT[i][j] = 0;
 			}
 		}
+	}
+
+	cout << "Map" << endl;
+	for (int i = 0; i<NUM_CITIES; i++)
+	{
+		for (int j = 0; j<NUM_CITIES; j++)
+		{
+			cout << ADJMAT[i][j] << " ";
+		}
+		cout << endl;
 	}
 
 
@@ -35,10 +46,10 @@ int main(){
 
 	cout << endl;
 
-	//cout << "Initializing Iterative1 Test" << endl;
+	cout << "Initializing Iterative1 Test" << endl;
 	iterative1 it1Test;
-	//it1Test.DepthFirstSearch(tour, 0);
-	//it1Test.PrintBestTour();
+	it1Test.DepthFirstSearch(tour);
+	it1Test.PrintBestTour();
     
 	cout << endl;
 
@@ -47,6 +58,6 @@ int main(){
 	//it2Test.PrintAdjMat();
 	//it2Test.DepthFirstSearch(tour);
 	//it2Test.PrintBestTour();
-
+	delete ADJMAT;
 	return 0;
 }
