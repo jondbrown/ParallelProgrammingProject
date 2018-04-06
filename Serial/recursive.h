@@ -15,13 +15,13 @@ public:
 	void PrintBestTour();
 
 	//Find the current number of cities in the current tour
-	int CityCount(Tour tour);
+	int CityCount(Tour& tour);
 
 	//overwrites the best tour with the current tour
-	void UpdateBestTour(Tour tour);
+	void UpdateBestTour(Tour& tour);
 
 	//determines if a city is not included in the current tour
-	bool Feasible(Tour tour, int city);
+	bool Feasible(Tour& tour, int city);
 
 	//adds city to current tour
 	void AddCity(Tour& tour, int city);
@@ -30,7 +30,7 @@ public:
 	void RemoveLastCity(Tour& tour);
 
 	//determines if current tour is better than best tour
-	bool BestTour(Tour tour);
+	bool BestTour(Tour& tour);
 
 	//main recursive function
 	void DepthFirstSearch(Tour& tour);

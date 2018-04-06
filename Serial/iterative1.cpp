@@ -22,7 +22,7 @@ int iterative1::Pop(){
 }
 //------------------------------------------------------------
 //TOUR FUNCTIONS
-int iterative1::CityCount(Tour tour){
+int iterative1::CityCount(Tour& tour){
 	return tour.GetCityCount();
 }
 
@@ -34,22 +34,23 @@ void iterative1::AddCity(Tour& tour, int city){
 	tour.AddCity(city);
 }
 
-bool iterative1::BestTour(Tour tour){
+//checks if current tour cost is less than best tour
+bool iterative1::BestTour(Tour& tour){
 	return tour.GetTourCost()+tour.GetLastCityCost()<bestTourCost;
 }
 
-void iterative1::UpdateBestTour(Tour tour){
+void iterative1::UpdateBestTour(Tour& tour){
 	bestTour = tour;
-	bestTourCost = tour.GetTourCost()+tour.GetLastCityCost();
+	bestTourCost = tour.GetTourCost()+tour.GetLastCityCost(); 
 }
 	
-bool iterative1::Feasible(Tour tour, int city){
+bool iterative1::Feasible(Tour& tour, int city){
 	bool result = true;
-	size_t** adjMat = tour.GetAdjMatPtr();
+	size_t** adjMat = tour.GetAdjMatPtr(); //????add to iterative1 instance to eliminate function call????
 	vector<size_t> tourV = tour.GetTourVector();
 	for (int i = 0; i<tour.GetCityCount(); i++)
 	{
-		if (tourV[i] == city || adjMat[tourV[tour.GetCityCount() - 1]][city]==0)
+		if (adjMat[tourV[tour.GetCityCount() - 1]][city]==0 || tourV[i] == city) //?????REVERSE CONDITION ORDER??????
 		{
 			result = false;
 			break;
@@ -58,14 +59,15 @@ bool iterative1::Feasible(Tour tour, int city){
 	return result;
 }
 
-void iterative1::DepthFirstSearch(Tour& tour){
+void iterative1::DepthFirstSearch(Tour tour){
 	int city;
+	//push all cities onto stack
 	for(city = tour.GetMaxNumCities()-1; city>=1; city--){
 		Push(city);
 	}
 	while(!Empty()){
 		city = Pop();
-		if(city==0){
+		if(city==0){ //????? shoule be changed to starting city????
 			RemoveLastCity(tour);
 		}else{
 			AddCity(tour, city);

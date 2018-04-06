@@ -18,24 +18,27 @@ void recursive::PrintBestTour(){
 
 
 //Return the current number of cities in the current tour
-int recursive::CityCount(Tour tour){
+int recursive::CityCount(Tour& tour){
 	return tour.GetCityCount();
 }
 
 //overwrites the best tour with the current tour
-void recursive::UpdateBestTour(Tour tour){
+void recursive::UpdateBestTour(Tour& tour){
 	bestTour = tour;
-	bestTourCost = tour.GetTourCost() + tour.GetLastCityCost();
+	bestTourCost = tour.GetTourCost() + tour.GetLastCityCost(); // add distance from last city back to hometown
 }
 
 //determines if a city is not included in the current tour
-bool recursive::Feasible(Tour tour, int city){
+bool recursive::Feasible(Tour& tour, int city){
 	bool result = true;
+	//get matrix ////////////// perhaps add this to the recursive instance to eliminate function call
 	size_t** adjMat = tour.GetAdjMatPtr();
+	//get tour vector
 	vector<size_t> tourV = tour.GetTourVector();
 	for (int i = 0; i<tour.GetCityCount(); i++)
 	{
-		if (tourV[i] == city || adjMat[tourV[tour.GetCityCount() - 1]][city]==0)
+		//if tour already contains city or city cannot be reached from current city. ????SWAP CONDITION ORDER???
+		if (adjMat[tourV[tour.GetCityCount() - 1]][city]==0 || tourV[i] == city)
 		{
 			result = false;
 			break;
@@ -55,7 +58,7 @@ void recursive::RemoveLastCity(Tour& tour){
 }
 
 //determines if current tour is better than best tour
-bool recursive::BestTour(Tour tour){
+bool recursive::BestTour(Tour& tour){
 	return tour.GetTourCost() + tour.GetLastCityCost() < bestTourCost;
 }
 

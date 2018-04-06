@@ -17,19 +17,19 @@ public:
 	int Pop();
 	
 	//TOUR FUNCTIONS
-	int CityCount(Tour tour);
+	int CityCount(Tour& tour);
 	
 	void RemoveLastCity(Tour& tour);
 	
 	void AddCity(Tour& tour, int city);
 	
-	bool BestTour(Tour tour);
+	bool BestTour(Tour& tour);
 	
-	void UpdateBestTour(Tour tour);
+	void UpdateBestTour(Tour& tour);
 	
-	bool Feasible(Tour tour, int city);
+	bool Feasible(Tour& tour, int city);
 	
-	void DepthFirstSearch(Tour& tour);
+	void DepthFirstSearch(Tour tour);
 	
 	//PRINT FUNCTIONS
 	void PrintBestTour();

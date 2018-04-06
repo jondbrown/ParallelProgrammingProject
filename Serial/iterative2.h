@@ -14,16 +14,16 @@ public:
 	~iterative2();
 
 	//STACK FUNCTIONS
-	void PushCopy(Tour tour);
+	void PushCopy(Tour& tour);
 	bool Empty();
 	Tour Pop();
 
 	//TOUR FUNCTIONS
 	void AddCity(Tour& currentTour, int city);
-	int CityCount(Tour currentTour);
-	bool BestTour(Tour currentTour);
-	void UpdateBestTour(Tour currentTour);
-	bool Feasible(Tour currentTour, int city);
+	int CityCount(Tour& currentTour);
+	bool BestTour(Tour& currentTour);
+	void UpdateBestTour(Tour& currentTour);
+	bool Feasible(Tour& currentTour, int city);
 	void RemoveLastCity(Tour& currentTour);
 	void DepthFirstSearch(Tour currentTour);
 

@@ -41,19 +41,25 @@ int main(){
 
 	cout << "Initializing Recursion Test" << endl;
 	recursive recTest;
+	//start timer
 	recTest.DepthFirstSearch(tour);
+	//stop timer
 	recTest.PrintBestTour();
 
 	cout << endl;
 
 	cout << "Initializing Iterative1 Test" << endl;
 	iterative1 it1Test;
+	//start timer
 	it1Test.DepthFirstSearch(tour);
+	//stop timer
 	it1Test.PrintBestTour();
     
 	cout << endl;
 
+	cout << "Initializing Iterative2 Test" << endl;
 	iterative2 it2Test;
+	//stop timer
 	it2Test.DepthFirstSearch(tour);
 	it2Test.PrintBestTour();
 	delete ADJMAT;

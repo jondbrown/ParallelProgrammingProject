@@ -13,9 +13,9 @@ iterative2::~iterative2()
 }
 
 //Copies the passed tour and pushes it into the stack
- void iterative2::PushCopy(Tour tour)
+ void iterative2::PushCopy(Tour& tour)
 {
-	 Tour newTour = tour;
+	Tour newTour = tour;
 	theStack.push(newTour);
 }
 
@@ -40,33 +40,33 @@ void iterative2::AddCity(Tour& currentTour, int city)
 }
 
 //Counts the number or cities in the passed tour
-int iterative2::CityCount(Tour currentTour)
+int iterative2::CityCount(Tour& currentTour)
 {
 	return currentTour.GetCityCount();
 }
 
 //Checks if the passed tour is a better tour than the current bestTour
-bool iterative2::BestTour(Tour currentTour)
+bool iterative2::BestTour(Tour& currentTour)
 {
 	return currentTour.GetTourCost() + currentTour.GetLastCityCost()<bestTourCost;
 }
 
 //Updates the best tour to the passed tour
-void iterative2::UpdateBestTour(Tour currentTour)
+void iterative2::UpdateBestTour(Tour& currentTour)
 {
 	bestTour = currentTour;
 	bestTourCost = currentTour.GetTourCost() + currentTour.GetLastCityCost();
 }
 
 //Checks if it is feasible to add the passed city to the passed tour
-bool iterative2::Feasible(Tour currentTour, int city)
+bool iterative2::Feasible(Tour& currentTour, int city)
 {
 	bool result = true;
-	size_t** adjMat = currentTour.GetAdjMatPtr();
+	size_t** adjMat = currentTour.GetAdjMatPtr(); //???add to iterative2 instance to eliminate function call????
 	vector<size_t> tourV = currentTour.GetTourVector();
 	for (int i = 0; i<currentTour.GetCityCount(); i++)
 	{
-		if (tourV[i] == city || adjMat[tourV[currentTour.GetCityCount() - 1]][city] == 0)
+		if (adjMat[tourV[currentTour.GetCityCount() - 1]][city] == 0 || tourV[i] == city) //??REVERSE CONDITIONS???
 		{
 			result = false;
 			break;
@@ -112,7 +112,8 @@ void iterative2::DepthFirstSearch(Tour currentTour)
 			}
 		}
 	}
-	cout << "Done!" << endl;
+	//removed delete since tour instance falls out of scope and is deconstructed after while loop iteration ends 
+	//cout << "Done!" << endl;
 }
 
 //prints the bestTour member variable
