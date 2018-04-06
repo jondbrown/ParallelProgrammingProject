@@ -13,9 +13,10 @@ iterative2::~iterative2()
 }
 
 //Copies the passed tour and pushes it into the stack
-void iterative2::PushCopy(int * tour)
+ void iterative2::PushCopy(Tour tour)
 {
-	
+	 Tour newTour = tour;
+	theStack.push(newTour);
 }
 
 //Checks whether or not the stack is empty
@@ -25,68 +26,48 @@ bool iterative2::Empty()
 }
 
 //pops the top partial tour off the stack
-int * iterative2::Pop()
+ Tour iterative2::Pop()
 {
-	int* popTour = theStack.top();
+	Tour popTour = theStack.top();
 	theStack.pop();
 	return popTour;
 }
 
 //Adds the passed city to the passed tour
-void iterative2::AddCity(int * currentTour, int city)
+void iterative2::AddCity(Tour& currentTour, int city)
 {
-	currentTour[CityCount(currentTour)] = city;
+	currentTour.AddCity(city);
 }
 
 //Counts the number or cities in the passed tour
-int iterative2::CityCount(int * currentTour)
+int iterative2::CityCount(Tour currentTour)
 {
-	int count = 0;
-	for (int i = 0; i < NUM_CITIES; i++)
-	{
-		if (currentTour[i] != -1)
-		{
-			count++;
-		}
-		else
-		{
-			break;
-		}
-	}
-	return count;
+	return currentTour.GetCityCount();
 }
 
 //Checks if the passed tour is a better tour than the current bestTour
-bool iterative2::BestTour(int * currentTour)
+bool iterative2::BestTour(Tour currentTour)
 {
-	int newTour = 0;
-	//current tour score
-	int cTourScore = 0;
-	for (int i = 0; i < NUM_CITIES - 1; i++)
-	{
-		newTour += adjMat[currentTour[i]][currentTour[i + 1]];
-		currentTour += adjMat[bestTour[i]][bestTour[i + 1]];
-	}
-	newTour += adjMat[currentTour[NUM_CITIES - 1]][currentTour[HOMETOWN]];
-	cTourScore += adjMat[bestTour[NUM_CITIES - 1]][currentTour[HOMETOWN]];
-	return newTour < cTourScore;
+	return currentTour.GetTourCost() + currentTour.GetLastCityCost()<bestTourCost;
 }
 
 //Updates the best tour to the passed tour
-void iterative2::UpdateBestTour(int * currentTour)
+void iterative2::UpdateBestTour(Tour currentTour)
 {
-	for (int i = 0; i < NUM_CITIES; i++) 
-	{
-		bestTour[i] = currentTour[i];
-	}
+	bestTour = currentTour;
+	bestTourCost = currentTour.GetTourCost() + currentTour.GetLastCityCost();
 }
 
 //Checks if it is feasible to add the passed city to the passed tour
-bool iterative2::Feasible(int * currentTour, int city)
+bool iterative2::Feasible(Tour currentTour, int city)
 {
 	bool result = true;
-	for (int i = 0; i < NUM_CITIES; i++) {
-		if (currentTour[i] == city) {
+	size_t** adjMat = currentTour.GetAdjMatPtr();
+	vector<size_t> tourV = currentTour.GetTourVector();
+	for (int i = 0; i<currentTour.GetCityCount(); i++)
+	{
+		if (tourV[i] == city || adjMat[tourV[currentTour.GetCityCount() - 1]][city] == 0)
+		{
 			result = false;
 			break;
 		}
@@ -95,32 +76,33 @@ bool iterative2::Feasible(int * currentTour, int city)
 }
 
 //Removes the last city from the passed tour
-void iterative2::RemoveLastCity(int * currentTour)
+void iterative2::RemoveLastCity(Tour& currentTour)
 {
-	currentTour[CityCount(currentTour) - 1] = -1;
+	currentTour.RemoveLastCity();
 }
 
 //Does a breadth first search to find the best tour using a stack of partial tours
-void iterative2::DepthFirstSearch(int * currentTour)
+void iterative2::DepthFirstSearch(Tour currentTour)
 {
-	cout << "DepthFirstSearchStarting" << endl;
+	//cout << "DepthFirstSearchStarting" << endl;
 	PushCopy(currentTour);
 	while (!Empty())
 	{
-		int* currTour = Pop();
-		if (CityCount(currTour) == NUM_CITIES)
+		Tour currTour = Pop();
+		if (currTour.IsComplete())
 		{
-			cout << "if" << endl;
+			//cout << "if" << endl;
 			if (BestTour(currTour))
 			{
+				//cout << "if" << endl;
 				UpdateBestTour(currTour);
 			}
 		}
 		else
 		{
-			for (int nbr = NUM_CITIES - 1; nbr >= 1; nbr--)
+			for (int nbr = currTour.GetMaxNumCities() - 1; nbr >= 1; nbr--)
 			{
-				cout << "Else" << endl;
+				//cout << "Else" << endl;
 				if (Feasible(currTour, nbr))
 				{
 					AddCity(currTour, nbr);
@@ -129,8 +111,6 @@ void iterative2::DepthFirstSearch(int * currentTour)
 				}
 			}
 		}
-		delete currTour;
-		currTour = nullptr;
 	}
 	cout << "Done!" << endl;
 }
@@ -138,21 +118,12 @@ void iterative2::DepthFirstSearch(int * currentTour)
 //prints the bestTour member variable
 void iterative2::PrintBestTour()
 {
-	cout << "Iterative 2 Best Tour: ";
-	for (int i = 0; i < NUM_CITIES; i++) {
-		cout << bestTour[i] << " ";
+	cout << "Iterative2 Best Tour: ";
+	vector<size_t> tour = bestTour.GetTourVector();
+	for (size_t i = 0; i < bestTour.GetCityCount(); i++)
+	{
+		cout << tour[i] << " ";
 	}
-	cout << endl;
+	cout << endl << "Total Cost: " << bestTourCost << endl;
 }
 
-//Prints the adjMat variable
-void iterative2::PrintAdjMat()
-{
-	cout << "Iterative 2 Adjacency Matrix:" << endl;
-	for (int i = 0; i < NUM_CITIES; i++) {
-		for (int j = 0; j < NUM_CITIES; j++) {
-			cout << adjMat[i][j] << " ";
-		}
-		cout << endl;
-	}
-}

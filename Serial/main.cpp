@@ -5,7 +5,7 @@
 #include "iterative2.h"
 
 using namespace std;
-#define NUM_CITIES 4
+#define NUM_CITIES 9
 size_t** ADJMAT = new size_t*[NUM_CITIES];
 
 int main(){
@@ -53,11 +53,9 @@ int main(){
     
 	cout << endl;
 
-	//iterative2 it2Test;
-	//it2Test.PrintBestTour();
-	//it2Test.PrintAdjMat();
-	//it2Test.DepthFirstSearch(tour);
-	//it2Test.PrintBestTour();
+	iterative2 it2Test;
+	it2Test.DepthFirstSearch(tour);
+	it2Test.PrintBestTour();
 	delete ADJMAT;
 	return 0;
 }

@@ -26,7 +26,6 @@ int recursive::CityCount(Tour tour){
 void recursive::UpdateBestTour(Tour tour){
 	bestTour = tour;
 	bestTourCost = tour.GetTourCost() + tour.GetLastCityCost();
-	cout << "New Best Cost: " << tour.GetLastCityCost() << endl;
 }
 
 //determines if a city is not included in the current tour
